@@ -196,6 +196,7 @@ body {
                         border: none;
                         color: #fff;
                         outline: none;
+                        width: 100%;
 
                         &::placeholder {
                             color: lightgray;
@@ -226,11 +227,16 @@ body {
                     background-color: #2f2d52;
                 }
 
+                &.selected {
+                    background-color: #23224a;
+                }
+
                 img {
                     width: 50px;
                     height: 50px;
                     border-radius: 50%;
                     object-fit: cover;
+                    background-color: #5d5b8d;
                 }
 
                 .userChatInfo {
@@ -265,6 +271,24 @@ body {
                 justify-content: space-between;
                 padding: 10px;
                 color: lightgray;
+
+                .chatUser {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+
+                    .chatUserDisplayName {
+                        color: #fff;
+                        font-size: 16px;
+                    }
+                }
+
+                .chatImg {
+                    width: 30px;
+                    height: 30px;
+                    object-fit: cover;
+                    border-radius: 50px;
+                }
             }
 
             .chatIcons {
@@ -310,6 +334,7 @@ body {
                     .messageInfo {
                         display: flex;
                         flex-direction: column;
+                        align-items: center;
                         color: gray;
                         font-weight: 300;
 
@@ -319,9 +344,15 @@ body {
                             border-radius: 50%;
                             object-fit: cover;
                         }
+
+                        span {
+                            padding: 2px;
+                            font-size: 12px;
+                            font-weight: 100;
+                        }
                     }
                     .messageContent {
-                        max-width: 80%;
+                        max-width: 60%;
                         display: flex;
                         flex-direction: column;
                         gap: 10px;
@@ -363,10 +394,12 @@ body {
 
                 input {
                     width: 100%;
+                    height: 100%;
                     border: none;
                     outline: none;
                     color: #2f2d52;
                     font-size: 18px;
+                    padding-left: 5px;
 
                     &::placeholder {
                         color: lightgray;

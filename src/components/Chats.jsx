@@ -8,7 +8,9 @@ const Chats = () => {
     const [chats, setChats] = useState([]);
 
     const { currentUser } = useContext(AuthContext);
-    const { dispatch } = useContext(ChatContext);
+    const { dispatch, data } = useContext(ChatContext);
+
+    const selectedUser = data.user.displayName;
 
     useEffect(() => {
         const getChats = () => {
@@ -32,7 +34,7 @@ const Chats = () => {
         <div className="chats">
             {Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((chat) => (
                 <div
-                    className="userChat"
+                    className={(chat[1].userInfo.displayName === selectedUser) ? "userChat selected" : "userChat "}
                     key={chat[0]}
                     onClick={() => handleSelect(chat[1].userInfo)}
                 >
@@ -40,14 +42,13 @@ const Chats = () => {
                     <div className="userChatInfo">
                         <span>{chat[1].userInfo.displayName}</span>
                         <p>{
-
-                            ((chat[1].lastMessage?.text).length < 30) ? (chat[1].lastMessage?.text) : (chat[1].lastMessage?.text).substring(0, 30) + "..."
-
+                            (chat[1].lastMessage) ? (chat[1].lastMessage?.text).substring(0, 30) + ".." : ""
                         }</p>
                     </div>
                 </div>
-            ))}
-        </div>
+            ))
+            }
+        </div >
     );
 };
 

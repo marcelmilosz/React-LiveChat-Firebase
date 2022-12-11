@@ -5,14 +5,30 @@ import More from "../images/more.png";
 import Messages from "./Messages";
 import Input from "./Input";
 import { ChatContext } from "../context/ChatContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Chat = () => {
     const { data } = useContext(ChatContext);
+    const { currentUser } = useContext(AuthContext)
+
+
+    // After login we want to clear all openned conversations so user after login has to choose 
+    const OtherUser = () => {
+        if (data.user.displayName === currentUser.displayName) {
+            return ""
+        }
+        else {
+            return (data.user.photoURL) ? <> <img className="chatImg" src={(data.user.photoURL)} alt="" /> < span className="chatUserDisplayName" > {data.user?.displayName}</span > </> : ""
+        }
+    }
 
     return (
         <div className="chat">
             <div className="chatInfo">
-                <span>{data.user?.displayName}</span>
+                <div className="chatUser">
+                    <OtherUser />
+
+                </div>
                 <div className="chatIcons">
                     <img src={Cam} alt="" />
                     <img src={Add} alt="" />
