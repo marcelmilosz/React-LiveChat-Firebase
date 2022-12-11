@@ -46,7 +46,7 @@ const Input = () => {
                 }
             );
         } else {
-            if (text.length > 0) {
+            if (text.length > 0 && data.chatId !== 'null') {
                 await updateDoc(doc(db, "chats", data.chatId), {
                     messages: arrayUnion({
                         id: uuid(),
@@ -58,7 +58,7 @@ const Input = () => {
             }
         }
 
-        if (text.length > 0) {
+        if (text.length > 0 && data.chatId !== 'null') {
             await updateDoc(doc(db, "userChats", currentUser.uid), {
                 [data.chatId + ".lastMessage"]: {
                     text,
@@ -107,7 +107,7 @@ const Input = () => {
                 </label>
                 <button onClick={handleSend}>Send</button>
             </div>
-        </div>
+        </div >
     );
 };
 

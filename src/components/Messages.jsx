@@ -18,8 +18,13 @@ const Messages = () => {
         }
     }, [data.chatId])
 
+    const messageEmptyContainer = <div className='messageEmptyContainer'> <p> Select someone to chat (•◡•) </p> </div>
+
     return (
         <div className='messages'>
+
+            {(messages.length === 0) ? messageEmptyContainer : ""}
+
             {messages.map((m) => (
                 <Message message={m} key={m.id} />
             ))}
