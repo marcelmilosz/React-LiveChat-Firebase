@@ -46,38 +46,51 @@ const Input = () => {
                 }
             );
         } else {
-            await updateDoc(doc(db, "chats", data.chatId), {
-                messages: arrayUnion({
-                    id: uuid(),
-                    text,
-                    senderId: currentUser.uid,
-                    date: Timestamp.now(),
-                }),
-            });
+            if (text.length > 0) {
+                await updateDoc(doc(db, "chats", data.chatId), {
+                    messages: arrayUnion({
+                        id: uuid(),
+                        text,
+                        senderId: currentUser.uid,
+                        date: Timestamp.now(),
+                    }),
+                });
+            }
         }
 
-        await updateDoc(doc(db, "userChats", currentUser.uid), {
-            [data.chatId + ".lastMessage"]: {
-                text,
-            },
-            [data.chatId + ".date"]: serverTimestamp(),
-        });
+        if (text.length > 0) {
+            await updateDoc(doc(db, "userChats", currentUser.uid), {
+                [data.chatId + ".lastMessage"]: {
+                    text,
+                },
+                [data.chatId + ".date"]: serverTimestamp(),
+            });
 
-        await updateDoc(doc(db, "userChats", data.user.uid), {
-            [data.chatId + ".lastMessage"]: {
-                text,
-            },
-            [data.chatId + ".date"]: serverTimestamp(),
-        });
+            await updateDoc(doc(db, "userChats", data.user.uid), {
+                [data.chatId + ".lastMessage"]: {
+                    text,
+                },
+                [data.chatId + ".date"]: serverTimestamp(),
+            });
+        }
 
         setText("");
         setImg(null);
     };
+
+    const handleKeyDown = event => {
+
+        if (event.key === 'Enter') {
+            handleSend();
+        }
+    };
+
     return (
         <div className="input">
             <input
                 type="text"
                 placeholder="Type something..."
+                onKeyDown={handleKeyDown}
                 onChange={(e) => setText(e.target.value)}
                 value={text}
             />
