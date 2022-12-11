@@ -13,6 +13,8 @@ import {
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 const Input = () => {
     const [text, setText] = useState("");
@@ -106,7 +108,7 @@ const Input = () => {
                 <label htmlFor="file">
                     <img src={Img} alt="" />
                 </label>
-                <button onClick={handleSend}>Send</button>
+                <button onClick={handleSend}>Send <FontAwesomeIcon icon={faPaperPlane} /></button>
             </div>
         </div >
     );
