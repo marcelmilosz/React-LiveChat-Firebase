@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import Img from "../images/img.png";
-import Attach from "../images/attach.png";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import {
@@ -14,11 +13,13 @@ import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane, faFaceSmileWink } from '@fortawesome/free-solid-svg-icons'
+import EmojiPicker from 'emoji-picker-react';
 
 const Input = () => {
     const [text, setText] = useState("");
     const [img, setImg] = useState(null);
+    const [emojiShow, setEmojiShow] = useState(false)
 
     const { currentUser } = useContext(AuthContext);
     const { data } = useContext(ChatContext);
@@ -88,6 +89,16 @@ const Input = () => {
         }
     };
 
+    // When we click emoji button, we want to toggle visibility of emoji element
+    const handleEmojiClick = () => {
+        setEmojiShow(!emojiShow);
+    }
+
+    // When we click single emoji, we want to add it to Input 
+    const onEmojiClick = (e) => {
+        setText(text + e.emoji)
+    }
+
     return (
         <div className="input">
             <input
@@ -98,18 +109,23 @@ const Input = () => {
                 value={text}
             />
             <div className="send">
-                <img src={Attach} alt="" />
                 <input
                     type="file"
                     style={{ display: "none" }}
                     id="file"
                     onChange={(e) => setImg(e.target.files[0])}
                 />
+                <button className="emoji-button" onClick={handleEmojiClick}> <FontAwesomeIcon icon={faFaceSmileWink} /> </button>
                 <label htmlFor="file">
                     <img src={Img} alt="" />
                 </label>
                 <button onClick={handleSend}>Send <FontAwesomeIcon icon={faPaperPlane} /></button>
             </div>
+            {emojiShow && <div className="emoji-picker-container">
+                <EmojiPicker onEmojiClick={onEmojiClick} height={"100%"} width={"100%"} />
+            </div>}
+
+
         </div >
     );
 };

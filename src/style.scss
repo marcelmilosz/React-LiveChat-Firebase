@@ -212,6 +212,7 @@ $f-errorMessage: rgba(255, 0, 0, 0.625);
             flex: 1;
             background-color: $pureWhite;
             position: relative;
+            z-index: 100;
 
             .navbar {
                 display: flex;
@@ -509,6 +510,7 @@ $f-errorMessage: rgba(255, 0, 0, 0.625);
                 align-items: center;
                 justify-content: flex-start;
                 box-shadow: 0px 10px 30px rgba(34, 34, 34, 0.3);
+                position: relative;
 
                 input {
                     height: 100%;
@@ -536,6 +538,12 @@ $f-errorMessage: rgba(255, 0, 0, 0.625);
                         height: 24px;
                         cursor: pointer;
 
+                        transition: all 200ms;
+
+                        &:hover {
+                            transform: scale(1.05);
+                        }
+
                         @include tablet {
                             display: none;
                         }
@@ -555,6 +563,41 @@ $f-errorMessage: rgba(255, 0, 0, 0.625);
                         &:hover {
                             transform: scale(1.05);
                         }
+                    }
+
+                    .emoji-button {
+                        all: unset;
+                        color: lightgray;
+                        font-size: 24px;
+                        cursor: pointer;
+
+                        @include mobile {
+                            display: none;
+                        }
+                    }
+                }
+
+                .emoji-picker-container {
+                    min-width: 40%;
+                    max-width: 80%;
+                    height: 400px;
+                    position: absolute;
+                    top: -410px;
+                    right: 10px;
+                    box-sizing: border-box;
+
+                    transition: all 200ms;
+
+                    .EmojiPickerReact {
+                        box-shadow: 0px 0px 15px rgba(17, 17, 17, 0.1);
+
+                        .epr-icn-search {
+                            display: none;
+                        }
+                    }
+
+                    @include mobile() {
+                        display: none;
                     }
                 }
             }

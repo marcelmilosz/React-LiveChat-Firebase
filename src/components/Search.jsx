@@ -23,6 +23,8 @@ const Search = () => {
         } catch (err) {
             setErr(true);
         }
+
+        console.log("Searched", err, username)
     };
 
     const handleKey = (e) => {
