@@ -44,9 +44,11 @@ $chatInput: #fafafa;
 
 // Font colors
 $f-black: #222;
+$f-strongGray: rgb(184, 184, 184);
+$f-errorMessage: rgba(255, 0, 0, 0.625);
 
 .formContainer {
-    background-color: #a7bcff;
+    background: $main-background;
     height: 100vh;
     display: flex;
     align-items: center;
@@ -54,22 +56,77 @@ $f-black: #222;
 
     .formWrapper {
         background-color: #fff;
-        padding: 20px 60px;
+        box-shadow: 0px 0px 50px rgba(17, 17, 17, 0.2);
+        padding: 40px 60px;
         border-radius: 10px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 4px;
         align-items: center;
 
         .logo {
-            color: #5d5b8d;
+            color: $f-black;
             font-weight: bold;
-            font-size: 24px;
+            font-size: 28px;
         }
 
         .title {
-            color: #5d5b8d;
+            color: $f-strongGray;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .ErrorMessage {
+            color: $f-errorMessage;
             font-size: 12px;
+        }
+
+        .UploadingMessage {
+            color: lightgray;
+            font-size: 12px;
+        }
+
+        @keyframes loadingAnimation {
+            0% {
+                transform: scale(0.4);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(0.4);
+            }
+        }
+
+        .loading-animation-container {
+            width: 100%;
+            height: 30px;
+            display: flex;
+            flex-direction: row;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+
+            div {
+                width: 15px;
+                height: 15px;
+
+                border-radius: 50px;
+                background-color: $lightGray;
+
+                transition: all 200ms;
+            }
+
+            div:nth-child(1) {
+                animation: loadingAnimation 1500ms infinite linear;
+            }
+            div:nth-child(2) {
+                animation: loadingAnimation 1500ms 300ms infinite linear;
+            }
+            div:nth-child(3) {
+                animation: loadingAnimation 1500ms 500ms infinite linear;
+            }
         }
 
         form {
@@ -78,10 +135,11 @@ $f-black: #222;
             gap: 15px;
 
             input {
-                width: 250px;
+                min-width: 250px;
                 padding: 15px;
                 border: none;
-                border-bottom: 1px solid #a7bcff;
+                border-bottom: 1px solid $lightGray;
+                outline: none;
 
                 &::placeholder {
                     color: rgb(175, 175, 175);
@@ -89,19 +147,25 @@ $f-black: #222;
             }
 
             button {
-                background-color: #7b96ec;
+                background-color: $button-send;
                 color: #fff;
                 padding: 10px;
                 font-weight: bold;
                 border: none;
                 cursor: pointer;
+                border-radius: 4px;
+                transition: all 200ms;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
             }
 
             label {
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                color: #8da4f1;
+                color: $f-black;
                 font-size: 12px;
                 cursor: pointer;
 
@@ -154,7 +218,8 @@ $f-black: #222;
                 align-items: center;
                 background-color: $navbar-left;
                 height: 50px;
-                padding: 10px;
+                padding: 10px 12px;
+                gap: 2px;
                 justify-content: space-between;
                 color: $pureWhite;
 
@@ -233,6 +298,7 @@ $f-black: #222;
                         color: #fff;
                         outline: none;
                         width: 100%;
+                        color: $f-black;
 
                         &::placeholder {
                             color: lightgray;
@@ -245,8 +311,15 @@ $f-black: #222;
                             border: 1px solid #fff;
 
                             padding: 12px;
+                            font-size: 12px;
                             box-sizing: border-box;
+                            width: 100%;
                         }
+                    }
+
+                    @include mobile {
+                        padding: 0;
+                        width: 100%;
                     }
                 }
             }
@@ -357,10 +430,15 @@ $f-black: #222;
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    text-align: center;
 
                     p {
                         font-size: 26px;
-                        color: #9494a7;
+                        color: rgb(163, 163, 163);
+                    }
+                    span {
+                        font-size: 14px;
+                        font-weight: 300;
                     }
                 }
 

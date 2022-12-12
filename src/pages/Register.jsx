@@ -8,6 +8,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
     const [err, setErr] = useState(false);
+    const [errMsg, setErrMsg] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -56,6 +57,10 @@ const Register = () => {
         } catch (err) {
             setErr(true);
             setLoading(false);
+
+            let errMessage = err.message.replace("Firebase: Error (auth/", "").replace("-", " ").replace(")", "")
+            errMessage = errMessage.charAt(0).toUpperCase() + errMessage.slice(1);
+            setErrMsg(errMessage)
         }
     };
 
@@ -69,16 +74,23 @@ const Register = () => {
                     <input required type="email" placeholder="Email" />
                     <input required type="password" placeholder="Password" />
                     <input required style={{ display: "none" }} type="file" id="file" />
-                    <label htmlFor="file">
+                    {loading && <div className="loading-animation-container">
+                        <div> </div>
+                        <div> </div>
+                        <div> </div>
+                    </div>
+                    }
+                    {!loading && <label htmlFor="file">
                         <img src={Add} alt="" />
-                        <span>Add an avatar</span>
-                    </label>
+                        <span>Add an avatar </span>
+                    </label>}
+
                     <button disabled={loading}>Sign up</button>
-                    {loading && "Uploading and compressing the image please wait..."}
-                    {err && <span>Something went wrong</span>}
+                    {loading && <span className="UploadingMessage"> Uploading and compressing the image please wait... </span>}
+                    {err && <span className="ErrorMessage"> {errMsg} </span>}
                 </form>
                 <p>
-                    You do have an account? <Link to="/register">Login</Link>
+                    You do have an account? <Link to="/login">Login</Link>
                 </p>
             </div>
         </div>

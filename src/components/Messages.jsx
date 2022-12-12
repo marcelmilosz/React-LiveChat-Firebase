@@ -18,7 +18,7 @@ const Messages = () => {
         }
     }, [data.chatId])
 
-    const messageEmptyContainer = <div className='messageEmptyContainer'> <p> Start chatting (•◡•) </p> </div>
+    const messageEmptyContainer = <div className='messageEmptyContainer'> <p> Select or add someone to start chatting (•◡•) <br /><span> To add your first friend, enter his name in 'Find a user' and hit enter! </span> </p> </div>
 
     return (
         <div className='messages'>
