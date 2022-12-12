@@ -24,7 +24,7 @@ const Search = () => {
             setErr(true);
         }
 
-        console.log("Searched", err, username)
+        // console.log("Searched", err, username)
     };
 
     const handleKey = (e) => {

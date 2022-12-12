@@ -30,8 +30,11 @@ const Message = ({ message }) => {
                 <span> {(todayDay === messageDay) ? hoursAndMinutes : dayAndMonthOfMessage} </span>
             </div>
             <div className="messageContent">
-                <p> {message.text} </p>
-                {message.img && <img src={message.img} alt="" />}
+                {(message.text.length > 0)
+                    ? <p> {message.text} </p>
+                    : ""
+                }
+                {message.img && <img className="messageImage" src={message.img} alt="" />}
             </div>
         </div>
     )

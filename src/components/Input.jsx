@@ -13,7 +13,8 @@ import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane, faFaceSmileWink } from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { faCircleXmark, faFaceSmileWink } from '@fortawesome/free-regular-svg-icons'
 import EmojiPicker from 'emoji-picker-react';
 
 const Input = () => {
@@ -21,8 +22,30 @@ const Input = () => {
     const [img, setImg] = useState(null);
     const [emojiShow, setEmojiShow] = useState(false)
 
+    const [errorInInput, setErrorInInput] = useState(false)
+    const [errMsg, setErrMsg] = useState("")
+
     const { currentUser } = useContext(AuthContext);
     const { data } = useContext(ChatContext);
+
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    const handleError = async (msg) => {
+
+        setErrMsg(msg)
+        setErrorInInput(true);
+        await delay(3000);
+
+        setErrorInInput(false);
+        setText("");
+        setImg(null);
+        setErrMsg("");
+    }
+
+    const handleImageChange = (e) => {
+        console.log("aa", e.target.files[0])
+        setImg(e.target.files[0])
+    }
 
     const handleSend = async () => {
 
@@ -31,24 +54,42 @@ const Input = () => {
 
             const uploadTask = uploadBytesResumable(storageRef, img);
 
-            uploadTask.on(
-                (error) => {
-                    //TODO:Handle Error
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await updateDoc(doc(db, "chats", data.chatId), {
-                            messages: arrayUnion({
-                                id: uuid(),
-                                text,
-                                senderId: currentUser.uid,
-                                date: Timestamp.now(),
-                                img: downloadURL,
-                            }),
-                        });
-                    });
-                }
-            );
+            if (!img.type.includes("image")) {
+                handleError("Wrong image type");
+            }
+            else if (1000 < (img.size) / 1024) {
+                handleError("Maximum image size: 1 MB");
+            }
+            else {
+                uploadTask.on(
+                    (error) => {
+                        console.log(error);
+                        handleError("Image is too big to upload!");
+                    },
+                    () => {
+                        try {
+                            getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                                await updateDoc(doc(db, "chats", data.chatId), {
+                                    messages: arrayUnion({
+                                        id: uuid(),
+                                        text,
+                                        senderId: currentUser.uid,
+                                        date: Timestamp.now(),
+                                        img: downloadURL,
+                                    }),
+                                });
+                            });
+                        }
+                        catch (e) {
+                            console.log("Error!")
+                        }
+
+                    }
+                );
+            }
+
+
+
         } else {
             if (text.length > 0 && data.chatId !== 'null') {
                 await updateDoc(doc(db, "chats", data.chatId), {
@@ -103,7 +144,7 @@ const Input = () => {
         <div className="input">
             <input
                 type="text"
-                placeholder="Type something..."
+                placeholder={(img) ? "Add message to image or just click send -->" : "Type something..."}
                 onKeyDown={handleKeyDown}
                 onChange={(e) => setText(e.target.value)}
                 value={text}
@@ -113,17 +154,20 @@ const Input = () => {
                     type="file"
                     style={{ display: "none" }}
                     id="file"
-                    onChange={(e) => setImg(e.target.files[0])}
+                    onChange={(e) => handleImageChange(e)}
                 />
                 <button className="emoji-button" onClick={handleEmojiClick}> <FontAwesomeIcon icon={faFaceSmileWink} /> </button>
-                <label htmlFor="file">
-                    <img src={Img} alt="" />
-                </label>
+                <label htmlFor="file"> <img src={Img} alt="" /> </label>
                 <button onClick={handleSend}>Send <FontAwesomeIcon icon={faPaperPlane} /></button>
             </div>
             {emojiShow && <div className="emoji-picker-container">
                 <EmojiPicker onEmojiClick={onEmojiClick} height={"100%"} width={"100%"} />
             </div>}
+
+            {errorInInput && <div className="input-error-container">
+                <FontAwesomeIcon icon={faCircleXmark} /> Error: {errMsg}
+            </div>}
+
 
 
         </div >
