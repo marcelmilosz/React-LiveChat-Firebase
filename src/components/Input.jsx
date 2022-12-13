@@ -3,11 +3,7 @@ import Img from "../images/img.png";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import {
-    arrayUnion,
-    doc,
-    serverTimestamp,
-    Timestamp,
-    updateDoc,
+    arrayUnion, doc, serverTimestamp, Timestamp, updateDoc,
 } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
@@ -44,6 +40,9 @@ const Input = () => {
 
     const handleSend = async () => {
 
+        let tmp = text; // Helps to make input feel instant
+        setText("");
+
         if (img) {
             const storageRef = ref(storage, uuid());
 
@@ -58,7 +57,7 @@ const Input = () => {
             else {
                 uploadTask.on(
                     (error) => {
-                        console.log(error);
+                        // console.log(error);
                         handleError("Image is too big to upload!");
                     },
                     () => {
@@ -76,7 +75,7 @@ const Input = () => {
                             });
                         }
                         catch (e) {
-                            console.log("Error!")
+                            // console.log("Error!")
                         }
 
                     }
@@ -86,7 +85,7 @@ const Input = () => {
 
 
         } else {
-            if (text.length > 0 && data.chatId !== 'null') {
+            if (tmp.length > 0 && data.chatId !== 'null') {
                 await updateDoc(doc(db, "chats", data.chatId), {
                     messages: arrayUnion({
                         id: uuid(),
@@ -98,7 +97,7 @@ const Input = () => {
             }
         }
 
-        if (text.length > 0 && data.chatId !== 'null') {
+        if (tmp.length > 0 && data.chatId !== 'null') {
             await updateDoc(doc(db, "userChats", currentUser.uid), {
                 [data.chatId + ".lastMessage"]: {
                     text,
@@ -114,8 +113,8 @@ const Input = () => {
             });
         }
 
-        setText("");
         setImg(null);
+
     };
 
     const handleKeyDown = event => {

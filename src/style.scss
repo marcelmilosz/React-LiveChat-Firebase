@@ -529,6 +529,11 @@ $f-sender-link: rgb(255, 255, 255);
                         flex-direction: column;
                         gap: 10px;
 
+                        @include mobile() {
+                            max-width: 70%;
+                            word-break: break-all;
+                        }
+
                         p {
                             background-color: $userChatMessage;
                             padding: 10px 20px;
