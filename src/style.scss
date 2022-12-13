@@ -39,13 +39,15 @@ $navbar-right: rgb(42, 42, 42);
 $button-send: rgba(35, 160, 255, 1);
 $button-logout: rgb(218, 218, 218);
 
-$userChatMessage: rgba(35, 160, 255, 0.9);
+$userChatMessage: rgb(197, 215, 238);
 $chatInput: #fafafa;
 
 // Font colors
 $f-black: #222;
 $f-strongGray: rgb(184, 184, 184);
 $f-errorMessage: rgba(255, 0, 0, 0.625);
+$f-link: rgb(41, 99, 235);
+$f-link-hover: rgb(77, 160, 255);
 
 .formContainer {
     background: $main-background;
@@ -460,6 +462,7 @@ $f-errorMessage: rgba(255, 0, 0, 0.625);
                             height: 40px;
                             border-radius: 50%;
                             object-fit: cover;
+                            background-color: $pureWhite;
                         }
 
                         span {
@@ -479,11 +482,25 @@ $f-errorMessage: rgba(255, 0, 0, 0.625);
                             padding: 10px 20px;
                             border-radius: 2px 8px 8px 8px;
                             max-width: max-content;
-                            color: $pureWhite;
+                            color: $f-black;
+
+                            a {
+                                text-decoration: none;
+                                color: $f-link;
+                                word-wrap: break-word;
+
+                                i {
+                                    font-size: 0.8em;
+                                }
+
+                                &:hover {
+                                    color: $f-link-hover;
+                                }
+                            }
                         }
                         img {
                             width: 50%;
-                            background-color: $userChatMessage;
+                            background-color: $lightGray;
                             border-radius: 2px 8px 8px 8px;
                             max-width: max-content;
                             transition: all 200ms;
@@ -498,12 +515,18 @@ $f-errorMessage: rgba(255, 0, 0, 0.625);
                     &.owner {
                         flex-direction: row-reverse;
 
+                        .messageInfo {
+                            img {
+                                background-color: $pureWhite;
+                            }
+                        }
+
                         .messageContent {
                             align-items: flex-end;
 
                             img {
                                 width: 50%;
-                                background-color: $pureWhite;
+                                background-color: $lightGray;
                                 border-radius: 8px 2px 8px 8px;
                                 max-width: max-content;
                                 cursor: pointer;
@@ -519,6 +542,20 @@ $f-errorMessage: rgba(255, 0, 0, 0.625);
                             background-color: $pureWhite;
                             color: $f-black;
                             border-radius: 8px 2px 8px 8px;
+
+                            a {
+                                text-decoration: none;
+                                color: $f-link;
+                                word-wrap: break-word;
+
+                                i {
+                                    font-size: 0.8em;
+                                }
+
+                                &:hover {
+                                    color: $f-link-hover;
+                                }
+                            }
                         }
                     }
                 }

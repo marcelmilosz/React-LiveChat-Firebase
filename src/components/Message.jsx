@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
+import { v4 as uuid } from "uuid";
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Message = ({ message }) => {
 
@@ -23,6 +26,38 @@ const Message = ({ message }) => {
         ref.current?.scrollIntoView({ behavior: "smooth" })
     }, [message])
 
+    // Here we are checking what type of message we have
+    // it can be normal text
+    // text with link
+    // only link
+    // we store it here in messageElement
+    let messageElement;
+    const handleMessage = () => {
+        if (message.text.length > 0) {
+            // If message has a link
+            if (message.text.includes("http")) {
+                let splittedMessage = message.text.split(" ");
+                let generatedElement = [];
+
+                for (let i = 0; i < splittedMessage.length; i++) {
+                    if (splittedMessage[i].includes("http")) {
+                        generatedElement.push(<a key={uuid()} href={splittedMessage[i]} target="_blank" rel="noreferrer"> {splittedMessage[i]} <i> <FontAwesomeIcon icon={faArrowUpRightFromSquare} /> </i> </a>)
+                    } else {
+                        generatedElement.push(<span key={uuid()}> {splittedMessage[i]} </span>)
+                    }
+                }
+                messageElement = (<p key={uuid()}> {generatedElement} </p>)
+            }
+            else {
+                messageElement = (<p key={uuid()}> {message.text} </p>)
+            }
+
+        }
+
+    }
+
+    handleMessage();
+
     return (
         <div ref={ref} className={`message ${message.senderId === currentUser.uid && "owner"}`}>
             <div className="messageInfo">
@@ -30,10 +65,7 @@ const Message = ({ message }) => {
                 <span> {(todayDay === messageDay) ? hoursAndMinutes : dayAndMonthOfMessage} </span>
             </div>
             <div className="messageContent">
-                {(message.text.length > 0)
-                    ? <p> {message.text} </p>
-                    : ""
-                }
+                {messageElement}
                 {message.img && <img className="messageImage" src={message.img} alt="" />}
             </div>
         </div>

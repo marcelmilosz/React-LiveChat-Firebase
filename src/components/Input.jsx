@@ -42,11 +42,6 @@ const Input = () => {
         setErrMsg("");
     }
 
-    const handleImageChange = (e) => {
-        console.log("aa", e.target.files[0])
-        setImg(e.target.files[0])
-    }
-
     const handleSend = async () => {
 
         if (img) {
@@ -138,6 +133,11 @@ const Input = () => {
     // When we click single emoji, we want to add it to Input 
     const onEmojiClick = (e) => {
         setText(text + e.emoji)
+        setEmojiShow(false);
+    }
+
+    const handleImageChange = (e) => {
+        setImg(e.target.files[0])
     }
 
     return (
