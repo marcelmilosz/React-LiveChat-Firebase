@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
+import { arrayUnion, doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Message = ({ message, handlePopup }) => {
@@ -56,6 +58,24 @@ const Message = ({ message, handlePopup }) => {
 
     }
 
+    const handleLike = async () => {
+        console.log("Like clicked")
+        console.log(message)
+
+
+        // if (tmp.length > 0 && data.chatId !== 'null') {
+        //     await updateDoc(doc(db, "chats", data.chatId), {
+        //         messages: arrayUnion({
+        //             id: uuid(),
+        //             text,
+        //             senderId: currentUser.uid,
+        //             date: Timestamp.now(),
+        //             isLiked: false
+        //         }),
+        //     });
+        // }
+    }
+
     handleMessage();
 
     return (
@@ -69,7 +89,14 @@ const Message = ({ message, handlePopup }) => {
                     {messageElement}
                     {message.img && <img className="messageImage" onClick={(e) => handlePopup(e)} src={message.img} alt="" />}
                 </div>
+
+                {/* Like button for Sender messages (not ours) */}
+                {message.senderId !== currentUser.uid &&
+                    <div onClick={handleLike} className="like-button-container"> <i><FontAwesomeIcon icon={faHeart} /> </i></div>
+                }
+
             </div>
+
         </>
     )
 }

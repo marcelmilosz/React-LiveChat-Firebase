@@ -43,6 +43,9 @@ const Input = () => {
         let tmp = text; // Helps to make input feel instant
         setText("");
 
+        if (emojiShow) setEmojiShow(false);
+
+
         if (img) {
             const storageRef = ref(storage, uuid());
 
@@ -70,6 +73,7 @@ const Input = () => {
                                         senderId: currentUser.uid,
                                         date: Timestamp.now(),
                                         img: downloadURL,
+                                        isLiked: false
                                     }),
                                 });
                             });
@@ -92,11 +96,13 @@ const Input = () => {
                         text,
                         senderId: currentUser.uid,
                         date: Timestamp.now(),
+                        isLiked: false
                     }),
                 });
             }
         }
 
+        // Update Last messages for each user
         if (tmp.length > 0 && data.chatId !== 'null') {
             await updateDoc(doc(db, "userChats", currentUser.uid), {
                 [data.chatId + ".lastMessage"]: {

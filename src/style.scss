@@ -523,6 +523,30 @@ $f-sender-link: rgb(255, 255, 255);
                             font-weight: 100;
                         }
                     }
+
+                    .like-button-container {
+                        width: 20px;
+                        height: 20px;
+
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        background-color: $lightGray;
+
+                        position: relative;
+                        left: calc(-30px);
+                        top: calc(-5px);
+
+                        border-radius: 50px;
+
+                        cursor: pointer;
+
+                        i {
+                            font-size: 12px;
+                        }
+                    }
+
                     .messageContent {
                         max-width: 60%;
                         display: flex;
