@@ -39,15 +39,15 @@ $navbar-right: rgb(42, 42, 42);
 $button-send: rgba(35, 160, 255, 1);
 $button-logout: rgb(218, 218, 218);
 
-$userChatMessage: rgb(197, 215, 238);
+$userChatMessage: rgb(46, 151, 255);
 $chatInput: #fafafa;
 
 // Font colors
 $f-black: #222;
 $f-strongGray: rgb(184, 184, 184);
 $f-errorMessage: rgba(255, 0, 0, 0.625);
-$f-link: rgb(41, 99, 235);
-$f-link-hover: rgb(77, 160, 255);
+$f-owner-link: rgb(44, 140, 208);
+$f-sender-link: rgb(255, 255, 255);
 
 .formContainer {
     background: $main-background;
@@ -415,6 +415,82 @@ $f-link-hover: rgb(77, 160, 255);
                 }
             }
 
+            .image-popup {
+                width: 100%;
+                height: 100%;
+
+                background-color: rgba(17, 17, 17, 0.8);
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                z-index: 400;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    max-width: 80vw;
+                    max-height: 80vh;
+                    background-color: $lightGray;
+                    z-index: 5;
+                }
+
+                .image-close-area {
+                    width: 90vw;
+                    height: 90vh;
+
+                    position: absolute;
+
+                    z-index: 1;
+                }
+
+                .image-close {
+                    width: 40px;
+                    height: 40px;
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50px;
+                    font-size: 24px;
+                    color: #fff;
+                    cursor: pointer;
+                    transition: transform 200ms;
+
+                    &:hover {
+                        transform: scale(1.05);
+                    }
+                }
+
+                button {
+                    min-width: 150px;
+                    min-height: 40px;
+
+                    position: absolute;
+
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 50px;
+                    background-color: #222;
+                    color: $pureWhite;
+                    font-weight: bold;
+
+                    z-index: 6;
+                    bottom: 20px;
+
+                    cursor: pointer;
+                    transition: transform 200ms;
+
+                    &:hover {
+                        transform: scale(1.05);
+                    }
+                }
+            }
+
             .messages {
                 background-color: rgba(236, 241, 245, 0.5);
                 padding: 10px 20px;
@@ -482,19 +558,14 @@ $f-link-hover: rgb(77, 160, 255);
                             padding: 10px 20px;
                             border-radius: 2px 8px 8px 8px;
                             max-width: max-content;
-                            color: $f-black;
+                            color: $pureWhite;
 
                             a {
-                                text-decoration: none;
-                                color: $f-link;
+                                color: $f-sender-link;
                                 word-wrap: break-word;
 
                                 i {
                                     font-size: 0.8em;
-                                }
-
-                                &:hover {
-                                    color: $f-link-hover;
                                 }
                             }
                         }
@@ -544,16 +615,11 @@ $f-link-hover: rgb(77, 160, 255);
                             border-radius: 8px 2px 8px 8px;
 
                             a {
-                                text-decoration: none;
-                                color: $f-link;
+                                color: $f-owner-link;
                                 word-wrap: break-word;
 
                                 i {
                                     font-size: 0.8em;
-                                }
-
-                                &:hover {
-                                    color: $f-link-hover;
                                 }
                             }
                         }

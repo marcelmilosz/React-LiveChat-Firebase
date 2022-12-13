@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const Message = ({ message }) => {
+const Message = ({ message, handlePopup }) => {
 
     const { currentUser } = useContext(AuthContext)
     const { data } = useContext(ChatContext)
@@ -41,7 +41,7 @@ const Message = ({ message }) => {
 
                 for (let i = 0; i < splittedMessage.length; i++) {
                     if (splittedMessage[i].includes("http")) {
-                        generatedElement.push(<a key={uuid()} href={splittedMessage[i]} target="_blank" rel="noreferrer"> {splittedMessage[i]} <i> <FontAwesomeIcon icon={faArrowUpRightFromSquare} /> </i> </a>)
+                        generatedElement.push(<a key={uuid()} href={splittedMessage[i]} target="_blank" rel="noreferrer"> {splittedMessage[i]}<i> <FontAwesomeIcon icon={faArrowUpRightFromSquare} /></i></a>)
                     } else {
                         generatedElement.push(<span key={uuid()}> {splittedMessage[i]} </span>)
                     }
@@ -59,16 +59,18 @@ const Message = ({ message }) => {
     handleMessage();
 
     return (
-        <div ref={ref} className={`message ${message.senderId === currentUser.uid && "owner"}`}>
-            <div className="messageInfo">
-                <img src={message.senderId === currentUser.uid ? currentUser.photoURL : data.user.photoURL} alt="" />
-                <span> {(todayDay === messageDay) ? hoursAndMinutes : dayAndMonthOfMessage} </span>
+        <>
+            <div ref={ref} className={`message ${message.senderId === currentUser.uid && "owner"}`}>
+                <div className="messageInfo">
+                    <img src={message.senderId === currentUser.uid ? currentUser.photoURL : data.user.photoURL} alt="" />
+                    <span> {(todayDay === messageDay) ? hoursAndMinutes : dayAndMonthOfMessage} </span>
+                </div>
+                <div className="messageContent">
+                    {messageElement}
+                    {message.img && <img className="messageImage" onClick={(e) => handlePopup(e)} src={message.img} alt="" />}
+                </div>
             </div>
-            <div className="messageContent">
-                {messageElement}
-                {message.img && <img className="messageImage" src={message.img} alt="" />}
-            </div>
-        </div>
+        </>
     )
 }
 
