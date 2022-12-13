@@ -4,7 +4,8 @@ import { ChatContext } from '../context/ChatContext';
 import { db } from '../firebase';
 import Message from "./Message"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
+
 
 const Messages = () => {
     const [messages, setMessages] = useState([])
@@ -34,10 +35,6 @@ const Messages = () => {
         setShowPopup(!showPopup);
     }
 
-    const handleImageDownload = () => {
-        console.log("Download img")
-    }
-
     const messageEmptyContainer = <div className='messageEmptyContainer'> <p> Select or add someone to start chatting (•◡•) <br /><span> To add your first friend, enter his name in 'Find a user' and hit enter! </span> </p> </div>
 
     return (
@@ -50,8 +47,6 @@ const Messages = () => {
                     <div className='image-close-area' onClick={handlePopup}></div>
 
                     <img src={popupImg} alt="" />
-                    <button onClick={handleImageDownload}> Download Image <FontAwesomeIcon icon={faDownload} /> </button>
-
                 </div>
             }
 

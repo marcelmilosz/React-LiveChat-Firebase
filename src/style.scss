@@ -465,30 +465,6 @@ $f-sender-link: rgb(255, 255, 255);
                         transform: scale(1.05);
                     }
                 }
-
-                button {
-                    min-width: 150px;
-                    min-height: 40px;
-
-                    position: absolute;
-
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 50px;
-                    background-color: #222;
-                    color: $pureWhite;
-                    font-weight: bold;
-
-                    z-index: 6;
-                    bottom: 20px;
-
-                    cursor: pointer;
-                    transition: transform 200ms;
-
-                    &:hover {
-                        transform: scale(1.05);
-                    }
-                }
             }
 
             .messages {

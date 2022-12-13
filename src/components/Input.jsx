@@ -130,10 +130,19 @@ const Input = () => {
         setEmojiShow(!emojiShow);
     }
 
+    const handleInputClick = () => {
+        setEmojiShow(false);
+    }
+
+    const handleInputChange = (e) => {
+        setText(e.target.value);
+        if (emojiShow) setEmojiShow(false);
+    }
+
     // When we click single emoji, we want to add it to Input 
     const onEmojiClick = (e) => {
         setText(text + e.emoji)
-        setEmojiShow(false);
+        // setEmojiShow(false);
     }
 
     const handleImageChange = (e) => {
@@ -146,7 +155,8 @@ const Input = () => {
                 type="text"
                 placeholder={(img) ? "Add message to image or just click send -->" : "Type something..."}
                 onKeyDown={handleKeyDown}
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e) => handleInputChange(e)}
+                onClick={handleInputClick}
                 value={text}
             />
             <div className="send">
@@ -160,9 +170,14 @@ const Input = () => {
                 <label htmlFor="file"> <img src={Img} alt="" /> </label>
                 <button onClick={handleSend}>Send <FontAwesomeIcon icon={faPaperPlane} /></button>
             </div>
-            {emojiShow && <div className="emoji-picker-container">
-                <EmojiPicker onEmojiClick={onEmojiClick} height={"100%"} width={"100%"} />
-            </div>}
+
+            {emojiShow &&
+                <>
+                    <div className="emoji-close-area"></div>
+                    <div className="emoji-picker-container">
+                        <EmojiPicker onEmojiClick={onEmojiClick} height={"100%"} width={"100%"} />
+                    </div>
+                </>}
 
             {errorInInput && <div className="input-error-container">
                 <FontAwesomeIcon icon={faCircleXmark} /> Error: {errMsg}
