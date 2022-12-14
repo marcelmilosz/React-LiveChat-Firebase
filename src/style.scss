@@ -545,6 +545,10 @@ $f-sender-link: rgb(255, 255, 255);
                         i {
                             font-size: 12px;
                         }
+
+                        &.liked {
+                            background-color: red;
+                        }
                     }
 
                     .messageContent {

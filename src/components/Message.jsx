@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
-import { arrayUnion, doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
@@ -59,24 +60,37 @@ const Message = ({ message, handlePopup }) => {
     }
 
     const handleLike = async () => {
-        console.log("Like clicked")
-        console.log(message)
 
+        try {
+            // Works! Holy Fuck... That took me a while.. 
+            // It switches 'isLiked' to true / false to make like
+            // It is done very poorly because it rewrites the whole object but for now It is all i need.
+            const docRef = doc(db, "chats", data.chatId);
+            const docSnap = await getDoc(docRef)
 
-        // if (tmp.length > 0 && data.chatId !== 'null') {
-        //     await updateDoc(doc(db, "chats", data.chatId), {
-        //         messages: arrayUnion({
-        //             id: uuid(),
-        //             text,
-        //             senderId: currentUser.uid,
-        //             date: Timestamp.now(),
-        //             isLiked: false
-        //         }),
-        //     });
-        // }
+            if (docSnap.exists()) {
+                let recivedData = docSnap.data().messages;
+                let correctMessageIdx = recivedData.findIndex(x => x.id === message.id);
+                let currentLike = recivedData[correctMessageIdx].isLiked;
+                recivedData[correctMessageIdx].isLiked = !currentLike;
+
+                // console.log(recivedData[correctMessageIdx])
+                await setDoc(docRef, { messages: recivedData }, { merge: true });
+                // console.log("don")
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }
+        catch (error) {
+            console.log("Nah", error)
+        }
+
     }
 
     handleMessage();
+
+    console.log(message)
 
     return (
         <>
@@ -92,7 +106,7 @@ const Message = ({ message, handlePopup }) => {
 
                 {/* Like button for Sender messages (not ours) */}
                 {message.senderId !== currentUser.uid &&
-                    <div onClick={handleLike} className="like-button-container"> <i><FontAwesomeIcon icon={faHeart} /> </i></div>
+                    <div onClick={handleLike} className={`like-button-container ${message.isLiked && 'liked'}`}> <i><FontAwesomeIcon icon={faHeart} /> </i></div>
                 }
 
             </div>
