@@ -39,3 +39,6 @@ The project that I always wanted to do and understand!
 ### Responsiveness
 <img width="1355" alt="Zrzut ekranu 2022-12-14 o 13 45 05" src="https://user-images.githubusercontent.com/61027817/207598766-7b90573d-3579-49c1-85d6-239e92fc817e.png">
 
+Still here? </br>
+You can check this app on this link: https://marcelreactchat.com.pl/ and chat to me adding 'Marcel' </br>
+App is hosted using Hostinger
