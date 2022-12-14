@@ -4,8 +4,8 @@ import { ChatContext } from '../context/ChatContext';
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { v4 as uuid } from "uuid";
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
+import { faArrowUpRightFromSquare, faHeart } from '@fortawesome/free-solid-svg-icons'
+// import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Message = ({ message, handlePopup }) => {
@@ -24,10 +24,11 @@ const Message = ({ message, handlePopup }) => {
     const dayAndMonthOfMessage = new Date((seconds) * 1000).toISOString().slice(5, 10).replace("-", "."); // Getting day and month of message etc. 08.11 means 8 day of November
 
 
+    // Smooth scroll to last message (only once!)
     const ref = useRef()
     useEffect(() => {
         ref.current?.scrollIntoView({ behavior: "smooth" })
-    }, [message])
+    }, [])
 
     // Here we are checking what type of message we have
     // it can be normal text
@@ -59,28 +60,35 @@ const Message = ({ message, handlePopup }) => {
 
     }
 
-    const handleLike = async () => {
+    const handleLike = async (e) => {
 
         try {
-            // Works! Holy Fuck... That took me a while.. 
-            // It switches 'isLiked' to true / false to make like
-            // It is done very poorly because it rewrites the whole object but for now It is all i need.
-            const docRef = doc(db, "chats", data.chatId);
-            const docSnap = await getDoc(docRef)
+            // Here we check who clicks it
+            // For now, owner of message cannot like his own message
+            if (message.senderId !== currentUser.uid) {
+                // Works! Holy Fuck... That took me a while.. 
+                // It switches 'isLiked' to true / false to make like
+                // It is done very poorly because it rewrites the whole object but for now It is all i need.
+                const docRef = doc(db, "chats", data.chatId);
+                const docSnap = await getDoc(docRef)
 
-            if (docSnap.exists()) {
-                let recivedData = docSnap.data().messages;
-                let correctMessageIdx = recivedData.findIndex(x => x.id === message.id);
-                let currentLike = recivedData[correctMessageIdx].isLiked;
-                recivedData[correctMessageIdx].isLiked = !currentLike;
+                if (docSnap.exists()) {
+                    let recivedData = docSnap.data().messages;
+                    let correctMessageIdx = recivedData.findIndex(x => x.id === message.id);
+                    let currentLike = recivedData[correctMessageIdx].isLiked;
+                    recivedData[correctMessageIdx].isLiked = !currentLike;
 
-                // console.log(recivedData[correctMessageIdx])
-                await setDoc(docRef, { messages: recivedData }, { merge: true });
-                // console.log("don")
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
+                    // console.log(recivedData[correctMessageIdx])
+                    await setDoc(docRef, { messages: recivedData }, { merge: true });
+                    // console.log("don")
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
             }
+
+
+
         }
         catch (error) {
             console.log("Nah", error)
@@ -89,8 +97,6 @@ const Message = ({ message, handlePopup }) => {
     }
 
     handleMessage();
-
-    console.log(message)
 
     return (
         <>
@@ -102,13 +108,17 @@ const Message = ({ message, handlePopup }) => {
                 <div className="messageContent">
                     {messageElement}
                     {message.img && <img className="messageImage" onClick={(e) => handlePopup(e)} src={message.img} alt="" />}
+
+                    {/* Like button for Sender messages (not ours) */}
+                    {message.senderId !== currentUser.uid &&
+                        <div id="senderLike" onClick={(e) => handleLike(e)} className={`like-button-container ${message.isLiked && 'liked'}`}> <i><FontAwesomeIcon icon={faHeart} /> </i></div>
+                    }
+
+                    {/* Like button for our messages */}
+                    {message.senderId === currentUser.uid &&
+                        <div id="ownerLike" onClick={(e) => handleLike(e)} className={`like-button-container-owner ${message.isLiked && 'liked'}`}> <i><FontAwesomeIcon icon={faHeart} /> </i></div>
+                    }
                 </div>
-
-                {/* Like button for Sender messages (not ours) */}
-                {message.senderId !== currentUser.uid &&
-                    <div onClick={handleLike} className={`like-button-container ${message.isLiked && 'liked'}`}> <i><FontAwesomeIcon icon={faHeart} /> </i></div>
-                }
-
             </div>
 
         </>
